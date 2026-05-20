@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deklination Lab</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: rgba(17, 24, 39, 0.88);
+      --panel2: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+      --accent: #60a5fa;
+      --accent2: #34d399;
+      --article: #38bdf8;
+      --ending: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 10px;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #020617, #0f172a);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .app {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: calc(100vh - 20px);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .random-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #02131f;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .random-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .hero-phrase {
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px 24px;
+      font-size: 44px;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .mini-status {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mini-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .mini-icon {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .case-icon {
+      background: #60a5fa;
+    }
+
+    .gender-icon {
+      background: #f472b6;
+    }
+
+    .article-icon {
+      background: #34d399;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+      backdrop-filter: blur(8px);
+    }
+
+    .panel-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+      letter-spacing: 0.08em;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    button.option {
+      border: none;
+      background: var(--panel2);
+      color: var(--text);
+      border-radius: 9px;
+      padding: 7px 10px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 13px;
+    }
+
+    button.option:hover {
+      background: #334155;
+    }
+
+    button.option.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #02131f;
+      font-weight: 700;
+    }
+
+    .table-panel {
+      flex: 1;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      height: 100%;
+    }
+
+    thead {
+      background: rgba(30, 41, 59, 0.9);
+    }
+
+    th {
+      padding: 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-align: left;
+    }
+
+    td {
+      padding: 14px 12px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      font-size: 18px;
+      vertical-align: middle;
+    }
+
+    .phrase {
+        font-size: 16px;
+      font-weight: 700;
+    }
+
+    .article {
+      color: var(--article);
+      font-weight: 700;
+    }
+
+    .ending {
+      color: var(--ending);
+      font-weight: 700;
+    }
+
+    .footer {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .info {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .info-label {
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.08em;
+    }
+
+    .info-value {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .hero-phrase {
+        font-size: 28px;
+        padding: 16px;
+      }
+
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        height: auto;
+      }
+
+      .controls,
+      .footer {
+        grid-template-columns: 1fr;
+      }
+
+      .phrase {
+        font-size: 22px;
+      }
+
+      td {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="title">Deklination Lab</div>
+      <button class="random-btn" id="randomButton">Zufällige Phrase</button>
+    </div>
+
+    <div class="hero-phrase" id="phraseCell"></div>
+
+    <div class="mini-status">
+      <div class="mini-card">
+        <span class="mini-icon case-icon"></span>
+        <span id="currentCase"></span>
+      </div>
+
+      <div class="mini-card">
+        <span class="mini-icon gender-icon"></span>
+        <span id="currentGender"></span>
+      </div>
+
+      <div class="mini-card">
+        <span class="mini-icon article-icon"></span>
+        <span id="currentArticleType"></span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="panel">
+        <div class="panel-title">Kasus</div>
+        <div class="buttons" id="caseButtons"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Genus</div>
+        <div class="buttons" id="genderButtons"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Artikeltyp</div>
+        <div class="buttons" id="articleButtons"></div>
+      </div>
+    </div>
+
+    <div class="table-panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Artikel</th>
+            <th>Adjektiv</th>
+            <th>Nomen</th>
+            <th>Phrase</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="articleCell"></td>
+            <td id="adjectiveCell"></td>
+            <td id="nounCell"></td>
+            <td class="phrase" id="tablePhraseCell"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    </div>
+
+  <script>
+    const cases = ["Nominativ", "Akkusativ", "Dativ", "Genitiv"];
+    const genders = ["Maskulin", "Feminin", "Neutrum", "Plural"];
+    const articleTypes = ["Bestimmt", "Unbestimmt", "Ohne Artikel"];
+
+    const nouns = {
+      Maskulin: { base: "Hund", genitiv: "Hundes" },
+      Feminin: { base: "Frau", genitiv: "Frau" },
+      Neutrum: { base: "Kind", genitiv: "Kindes" },
+      Plural: { base: "Kinder", genitiv: "Kinder" }
+    };
+
+    const adjectives = ["klein", "alt", "klug"];
+
+    const articles = {
+      Bestimmt: {
+        Nominativ: { Maskulin: "der", Feminin: "die", Neutrum: "das", Plural: "die" },
+        Akkusativ: { Maskulin: "den", Feminin: "die", Neutrum: "das", Plural: "die" },
+        Dativ: { Maskulin: "dem", Feminin: "der", Neutrum: "dem", Plural: "den" },
+        Genitiv: { Maskulin: "des", Feminin: "der", Neutrum: "des", Plural: "der" }
+      },
+      Unbestimmt: {
+        Nominativ: { Maskulin: "ein", Feminin: "eine", Neutrum: "ein", Plural: "—" },
+        Akkusativ: { Maskulin: "einen", Feminin: "eine", Neutrum: "ein", Plural: "—" },
+        Dativ: { Maskulin: "einem", Feminin: "einer", Neutrum: "einem", Plural: "—" },
+        Genitiv: { Maskulin: "eines", Feminin: "einer", Neutrum: "eines", Plural: "—" }
+      },
+      "Ohne Artikel": {
+        Nominativ: { Maskulin: "", Feminin: "", Neutrum: "", Plural: "" },
+        Akkusativ: { Maskulin: "", Feminin: "", Neutrum: "", Plural: "" },
+        Dativ: { Maskulin: "", Feminin: "", Neutrum: "", Plural: "" },
+        Genitiv: { Maskulin: "", Feminin: "", Neutrum: "", Plural: "" }
+      }
+    };
+
+    const adjectiveEndings = {
+      Bestimmt: {
+        Nominativ: { Maskulin: "e", Feminin: "e", Neutrum: "e", Plural: "en" },
+        Akkusativ: { Maskulin: "en", Feminin: "e", Neutrum: "e", Plural: "en" },
+        Dativ: { Maskulin: "en", Feminin: "en", Neutrum: "en", Plural: "en" },
+        Genitiv: { Maskulin: "en", Feminin: "en", Neutrum: "en", Plural: "en" }
+      },
+      Unbestimmt: {
+        Nominativ: { Maskulin: "er", Feminin: "e", Neutrum: "es", Plural: "en" },
+        Akkusativ: { Maskulin: "en", Feminin: "e", Neutrum: "es", Plural: "en" },
+        Dativ: { Maskulin: "en", Feminin: "en", Neutrum: "en", Plural: "en" },
+        Genitiv: { Maskulin: "en", Feminin: "en", Neutrum: "en", Plural: "en" }
+      },
+      "Ohne Artikel": {
+        Nominativ: { Maskulin: "er", Feminin: "e", Neutrum: "es", Plural: "e" },
+        Akkusativ: { Maskulin: "en", Feminin: "e", Neutrum: "es", Plural: "e" },
+        Dativ: { Maskulin: "em", Feminin: "er", Neutrum: "em", Plural: "en" },
+        Genitiv: { Maskulin: "en", Feminin: "er", Neutrum: "en", Plural: "er" }
+      }
+    };
+
+    const state = {
+      case: "Nominativ",
+      gender: "Maskulin",
+      articleType: "Bestimmt",
+      adjective: "klein"
+    };
+
+    function createButtons(containerId, items, stateKey) {
+      const container = document.getElementById(containerId);
+
+      items.forEach(item => {
+        const button = document.createElement("button");
+        button.className = "option";
+        button.textContent = item;
+
+        if (state[stateKey] === item) {
+          button.classList.add("active");
+        }
+
+        button.addEventListener("click", () => {
+          state[stateKey] = item;
+
+          if (
+            state.articleType === "Unbestimmt" &&
+            state.gender === "Plural"
+          ) {
+            state.gender = "Maskulin";
+          }
+
+          refreshUI();
+        });
+
+        container.appendChild(button);
+      });
+    }
+
+    function highlightEnding(base, ending) {
+      return `${base}<span class="ending">${ending}</span>`;
+    }
+
+    function getNounForm() {
+      const noun = nouns[state.gender];
+
+      if (
+        state.case === "Genitiv" &&
+        (state.gender === "Maskulin" || state.gender === "Neutrum")
+      ) {
+        return noun.genitiv;
+      }
+
+      if (state.case === "Dativ" && state.gender === "Plural") {
+        return noun.base + "n";
+      }
+
+      return noun.base;
+    }
+
+    function refreshButtons() {
+      document.querySelectorAll("#caseButtons button").forEach(btn => {
+        btn.classList.toggle("active", btn.textContent === state.case);
+      });
+
+      document.querySelectorAll("#genderButtons button").forEach(btn => {
+        btn.classList.toggle("active", btn.textContent === state.gender);
+      });
+
+      document.querySelectorAll("#articleButtons button").forEach(btn => {
+        btn.classList.toggle("active", btn.textContent === state.articleType);
+      });
+    }
+
+    function refreshUI() {
+      refreshButtons();
+
+      const article = articles[state.articleType][state.case][state.gender];
+      const ending = adjectiveEndings[state.articleType][state.case][state.gender];
+      const adjectiveHTML = highlightEnding(state.adjective, ending);
+      const noun = getNounForm();
+
+      document.getElementById("articleCell").innerHTML = `<span class="article">${article}</span>`;
+      document.getElementById("adjectiveCell").innerHTML = adjectiveHTML;
+      document.getElementById("nounCell").textContent = noun;
+
+      const phraseParts = [
+        article ? `<span class="article">${article}</span>` : "",
+        adjectiveHTML,
+        noun
+      ];
+
+      document.getElementById("phraseCell").innerHTML = phraseParts
+        .filter(Boolean)
+        .join(" ");
+
+      document.getElementById("tablePhraseCell").innerHTML = phraseParts
+        .filter(Boolean)
+        .join(" ");
+
+      document.getElementById("currentCase").textContent = state.case;
+      document.getElementById("currentGender").textContent = state.gender;
+      document.getElementById("currentArticleType").textContent = state.articleType;
+    }
+
+    function randomPhrase() {
+      state.case = cases[Math.floor(Math.random() * cases.length)];
+      state.articleType = articleTypes[Math.floor(Math.random() * articleTypes.length)];
+
+      const availableGenders =
+        state.articleType === "Unbestimmt"
+          ? ["Maskulin", "Feminin", "Neutrum"]
+          : genders;
+
+      state.gender =
+        availableGenders[Math.floor(Math.random() * availableGenders.length)];
+
+      state.adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+
+      refreshUI();
+    }
+
+    createButtons("caseButtons", cases, "case");
+    createButtons("genderButtons", genders, "gender");
+    createButtons("articleButtons", articleTypes, "articleType");
+
+    document
+      .getElementById("randomButton")
+      .addEventListener("click", randomPhrase);
+
+    refreshUI();
+  </script>
+</body>
+</html>
